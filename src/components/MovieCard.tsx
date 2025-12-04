@@ -5,23 +5,27 @@ import { getImageUrl } from "../config/api"
 import type { MovieCardProps } from "../types/movie"   
 import TrailerModal from "./TrailerModal"
 import { useFavorites } from "../context/FavoritesContext"
+import { useHistory } from "../context/HistoryContext"
 import "./MovieCard.css"
 
 const MovieCard: React.FC<MovieCardProps> = ({ movie, type = "movie" }) => {
   const navigate = useNavigate()
   const [showTrailer, setShowTrailer] = useState(false)
-
+  const { addToHistory } = useHistory()
   const { favorites, toggleFavorite } = useFavorites()
   const isFavorite = favorites.includes(movie.id)
 
   const handleCardClick = () => {
-    navigate(`/${type}/${movie.id}`)
+  addToHistory(movie.id)  
+  navigate(`/${type}/${movie.id}`)
   }
 
   const handlePlayClick = (e: React.MouseEvent) => {
     e.stopPropagation()
+    addToHistory(movie.id)   
     setShowTrailer(true)
   }
+
 
   const handleFavoriteClick = (e: React.MouseEvent) => {
     e.stopPropagation()

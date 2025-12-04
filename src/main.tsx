@@ -4,6 +4,7 @@ import { BrowserRouter } from "react-router-dom"
 import App from "./App.tsx"
 import { FavoritesProvider } from "./context/FavoritesContext.tsx"
 import ScrollToTop from "./components/ScrollToTop.tsx"
+import { HistoryProvider } from "./context/HistoryContext.tsx"
 import "./index.css"
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
@@ -11,7 +12,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <BrowserRouter basename="/project/">
       <ScrollToTop />  
       <FavoritesProvider>
-        <App />
+        <HistoryProvider>   
+          <App />
+        </HistoryProvider>
       </FavoritesProvider>
     </BrowserRouter>
   </React.StrictMode>,

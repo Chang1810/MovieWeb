@@ -8,6 +8,7 @@ interface LoginModalProps {
 
 const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
   const [isSignup, setIsSignup] = useState(false);
+  const [isForgotPassword, setIsForgotPassword] = useState(false);
   const [displayName, setDisplayName] = useState("");
   const [identifier, setIdentifier] = useState(""); 
   const [password, setPassword] = useState("");
@@ -33,6 +34,14 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
 
     if (!isValidEmail(identifier) && !isValidPhone(identifier)) {
       setError("Please enter a valid email or a 10-digit phone number.");
+      return;
+    }
+
+    if (isForgotPassword) {
+      alert("Password reset link has been sent to your email/phone!");
+      resetForm();
+      setIsForgotPassword(false);
+      onClose();
       return;
     }
 
@@ -65,20 +74,31 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
         <button className="modal-close" onClick={onClose}>
           ✖
         </button>
-        <h2>{isSignup ? "Sign Up" : "Login"}</h2>
-        <p>
-          {isSignup ? "Already have an account?" : "Don't have an account?"}{" "}
-          <span
-            className="link-text"
-            onClick={() => {
-              setIsSignup(!isSignup);
-              setError("");
-              resetForm();
-            }}
-          >
-            {isSignup ? "Login" : "Sign up"}
-          </span>
-        </p>
+
+        <h2>
+          {isForgotPassword
+            ? "Forgot Password"
+            : isSignup
+            ? "Sign Up"
+            : "Login"}
+        </h2>
+
+        {!isForgotPassword && (
+          <p>
+            {isSignup ? "Already have an account?" : "Don't have an account?"}{" "}
+            <span
+              className="link-text"
+              onClick={() => {
+                setIsSignup(!isSignup);
+                setError("");
+                resetForm();
+              }}
+            >
+              {isSignup ? "Login" : "Sign up"}
+            </span>
+          </p>
+        )}
+
         <form onSubmit={handleSubmit}>
           {isSignup && (
             <input
@@ -89,6 +109,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
               required
             />
           )}
+
           <input
             type="text"
             placeholder="Email or Phone Number"
@@ -96,27 +117,66 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
             onChange={(e) => setIdentifier(e.target.value)}
             required
           />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          {isSignup && (
-            <input
-              type="password"
-              placeholder="Confirm Password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-            />
+
+          {!isForgotPassword && (
+            <>
+              <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              {isSignup && (
+                <input
+                  type="password"
+                  placeholder="Confirm Password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                />
+              )}
+            </>
           )}
+
           {error && <p className="error-text">{error}</p>}
+
           <button type="submit">
-            {isSignup ? "Sign Up" : "Login"}
+            {isForgotPassword
+              ? "Reset Password"
+              : isSignup
+              ? "Sign Up"
+              : "Login"}
           </button>
         </form>
+
+        {!isSignup && !isForgotPassword && (
+          <p className="forgot-text">
+            <span
+              className="link-text"
+              onClick={() => {
+                setIsForgotPassword(true);
+                resetForm();
+              }}
+            >
+              Forgot Password?
+            </span>
+          </p>
+        )}
+
+        {isForgotPassword && (
+          <p className="forgot-text">
+            <span
+              className="link-text"
+              onClick={() => {
+                setIsForgotPassword(false);
+                resetForm();
+              }}
+            >
+              Back to Login
+            </span>
+          </p>
+        )}
       </div>
     </div>
   );

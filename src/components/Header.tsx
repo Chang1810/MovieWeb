@@ -7,6 +7,7 @@ import CountryDropdown from "./CountryDropDown"
 import SearchBar from "./SearchBar"
 import LoginModal from "./LoginModal"
 import ActorDropdown from "./ActorDropDown"
+import GeminiChatBox from "./GeminiChatbox"
 import "./Header.css"
 
 const Header = (): React.ReactElement => {
@@ -70,6 +71,7 @@ const Header = (): React.ReactElement => {
       </header>
 
       <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
+         <GeminiChatBox />
     </>
   )
 }
